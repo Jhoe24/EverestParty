@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡TOCA LA PUERTA! - Fiesta Everest</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Comic+Neue:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #fa6bff, #FFB6C1);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            overflow: hidden;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            color: #fff;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            text-align: center;
+            margin-bottom: 1px;
+            animation: bounce 2s infinite;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .door-container {
+            position: relative;
+            margin: 2rem 0;
+            transform-style: preserve-3d;
+        }
+
+        .door {
+            width: clamp(200px, 50vw, 280px);
+            height: clamp(320px, 60vh, 450px);
+            background-image: url('assets/img/puerta-boo.png');
+            background-size: 100% 100%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .door-handle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .door-panels {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            display: none;
+        }
+
+        .door-panel {
+            background: rgba(184, 64, 158, 0.3);
+            border: 2px solid #B8409E;
+            border-radius: 8px;
+        }
+
+        .door-flower {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #FFB6C1;
+            border-radius: 50%;
+            border: 3px solid #FF69B4;
+            display: none;
+        }
+
+        .door-flower::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 15px;
+            height: 15px;
+            background: #FF1493;
+            border-radius: 50%;
+        }
+
+        .mike-wazowski {
+            display: none;
+            transition: transform 0.3s ease;
+        }
+
+        /* Randall con globo de texto */
+        .randall-container {
+            position: absolute;
+            bottom: -20px;
+            right: -80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+            z-index: 10000;
+            animation: randallFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes randallFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border: 3px solid #333;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+            max-width: 160px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: bubblePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes bubblePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-top-color: #333;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 33px;
+            width: 0;
+            height: 0;
+            border: 7px solid transparent;
+            border-top-color: #ffffff;
+        }
+
+        .randall-placeholder {
+            width: 160px;
+            height: 200px;
+            background-image: url('assets/img/randall.png');
+            background-size: 100% 100%;
+            border-radius: 15px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .randall-placeholder:hover {
+            transform: scale(1.1);
+        }
+
+        .randall-placeholder::before {
+            background-image: url('assets/img/randall.png');
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+        }
+
+        /* Recipientes de gritos */
+        .scream-containers {
+            position: absolute;
+            bottom: -20px;
+            left: -80px;
+            display: flex;
+            gap: 1px;
+            animation: containersFloat 3.5s ease-in-out infinite;
+        }
+
+        @keyframes containersFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1deg); }
+        }
+
+        .scream-container {
+            width: 64px;
+            height: 90px;
+            background-image: url('assets/img/recipientes.png');
+            background-size: 100% 100% ;
+            border-radius: 5px 5px 8px 8px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .scream-container:hover {
+            transform: scale(1.1);
+        }
+
+        .scream-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 8px;
+            display: none;
+        }
+
+        .scream-container::after {
+            background-image: url('assets/img/');
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+        }
+
+        .scream-container:nth-child(2) {
+            background-image: url('assets/img/recipientes.png');
+            background-color: 100% 100%;
+            animation-delay: -0.5s;
+        }
+
+        .scream-container:nth-child(3) {
+
+            background-image: url('assets/img/recipientes.png');
+            background-color: 100% 100%;
+            animation-delay: -1s;
+        }
+
+        .instruction {
+            color: #fff;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            text-align: center;
+            margin-top: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .invitation-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: fadeIn 1s ease;
+        }
+        .invitation-images {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        }
+
+        .invitation-images img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .invitation-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            animation: cardEntrance 0.8s ease-out;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) rotateX(15deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        .invitation-card h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: #FF6B6B;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .invitation-card h2 {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: #4ECDC4;
+            margin-bottom: 2rem;
+        }
+
+        .party-details {
+            text-align: left;
+            color: #333;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .party-details strong {
+            color: #FF6B6B;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #ff5252;
+            transform: rotate(90deg);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(-10px) rotate(240deg); }
+        }
+
+        .sound-toggle {
+            position: fixed;
+            top: 20px;
+            right: inherit;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        /* Estilos para los nuevos elementos */
+        .monsters-inc-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .invitation-video video {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+        }
+
+        .countdown-timer {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <div class="floating-elements">
+        <div class="floating-emoji" style="left: 10%; top: 20%; animation-delay: 0s;">🌸</div>
+        <div class="floating-emoji" style="left: 80%; top: 15%; animation-delay: 1s;">🏵️</div>
+        <div class="floating-emoji" style="left: 15%; top: 80%; animation-delay: 2s;">🌼</div>
+        <div class="floating-emoji" style="left: 85%; top: 75%; animation-delay: 3s;">🌺</div>
+        <div class="floating-emoji" style="left: 50%; top: 10%; animation-delay: 4s;">🪷</div>
+    </div>
+
+    <button class="sound-toggle" onclick="toggleSound()">🔇</button>
+
+    <div class="container">
+        <h1 class="main-title">¡TOCA LA PUERTA!</h1>
+
+        <div class="door-container">
+            <div class="door" onclick="openDoor()">
+                <div class="door-flower"></div>
+                <div class="door-panels">
+                    <div class="door-panel"></div>
+                    <div class="door-panel"></div>
+                </div>
+                <div class="door-handle"></div>
+            </div>
+
+            <!-- Randall con globo de texto -->
+            <div class="randall-container">
+                <div class="speech-bubble">
+                    ¡Mike Wazowski!
+                </div>
+                <div class="randall-placeholder"></div>
+            </div>
+
+            <!-- Recipientes de gritos -->
+            <div class="scream-containers">
+                <div class="scream-container" ></div>
+                <div class="scream-container" ></div>
+                <div class="scream-container" ></div>
+            </div>
+        </div>
+
+        <p class="instruction" style="display: none;">¡Toca cualquier elemento para abrir la invitación!</p>
+    </div>
+
+    <!-- Sección de la invitación -->
+    <div class="invitation-content" id="invitationContent">
+    <div class="invitation-card">
+        <button class="close-btn" onclick="closeInvitation()">&times;</button>
+
+        <!-- Dos imágenes apiladas -->
+        <div class="invitation-images">
+        <img src="assets/img/Captura de pantalla 2025-07-20 141330.png" alt="Invitación parte 1">
+        <img src="assets/img/Captura de pantalla 2025-07-20 141248.png" alt="Invitación parte 2">
+        </div>
+
+        <!-- Temporizador -->
+        <div class="countdown-timer">
+        <p id="countdown">Faltan X días, X horas, X minutos, X segundos</p>
+        </div>
+
+        <p style="color: #FF6B6B; font-size: 1.2rem; font-weight: bold;">
+        ¡No faltes! Te esperamos para celebrar juntos 🎊
+        </p>
+    </div>
+    </div>
+        <!-- Audio de fondo: intentará reproducirse automáticamente y en bucle -->
+    <audio id="bgSound" src="assets/sound/Intro.mp3" autoplay loop muted playsinline></audio>
+
+
+
+    <script>
+        const bgSound = document.getElementById('bgSound');
+        let soundEnabled = false;
+
+
+        // Función para actualizar el temporizador
+        function updateCountdown() {
+            const eventDate = new Date('2025-08-30T17:00:00');
+            const now = new Date();
+            const diff = eventDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').innerHTML = "¡El evento ha comenzado!";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = `Faltan ${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+        }
+
+        // Actualizar el temporizador cada segundo
+        setInterval(updateCountdown, 1000);
+
+        // Llamar a la función inicialmente para mostrar el tiempo restante al cargar la página
+        updateCountdown();
+
+        // Crear estrellas
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 50;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Crear confetti
+        function createConfetti() {
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFA07A'];
+
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animation = `confettiFall ${confetti.style.animationDuration} linear infinite`;
+                document.body.appendChild(confetti);
+
+                // Remover confetti después de la animación
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.parentNode.removeChild(confetti);
+                    }
+                }, 5000);
+            }
+        }
+
+        // Función para abrir la puerta
+        function openDoor() {
+            if (soundEnabled) {
+                playDoorSound();
+            }
+
+            const door = document.querySelector('.door');
+            door.style.transform = 'rotateY(-25deg) scale(0.95)';
+            door.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+
+            setTimeout(() => {
+                document.getElementById('invitationContent').style.display = 'flex';
+                createConfetti();
+
+                if (soundEnabled) {
+                    playCelebrationSound();
+                }
+            }, 300);
+        }
+
+        // Función para cerrar la invitación
+        function closeInvitation() {
+            const invitationContent = document.getElementById('invitationContent');
+            invitationContent.style.animation = 'fadeOut 0.5s ease';
+
+            setTimeout(() => {
+                invitationContent.style.display = 'none';
+                invitationContent.style.animation = 'fadeIn 1s ease';
+
+                // Resetear la puerta
+                const door = document.querySelector('.door');
+                door.style.transform = '';
+                door.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+            }, 500);
+        }
+
+        // Función para alternar sonido
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.querySelector('.sound-toggle');
+
+            if (soundEnabled) {
+                bgSound.muted = false;
+                bgSound.play().catch(() => {
+                    console.warn('El navegador requiere una interacción del usuario para activar el sonido.');
+                });
+                btn.textContent = '🔊';
+            } else {
+                bgSound.muted = true;
+                btn.textContent = '🔇';
+                
+            }
+        }
+
+
+        // Simulación de sonidos (sin archivos de audio reales)
+        function playDoorSound() {
+            // Simulación de sonido de puerta
+            console.log('🚪 Sonido de puerta abriéndose');
+        }
+
+        function playCelebrationSound() {
+            // Simulación de sonido de celebración
+            console.log('🎉 Sonido de celebración');
+        }
+
+        // Agregar animación de fadeOut al CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.8); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar estrellas cuando se carga la página
+        window.addEventListener('load', () => {
+            createStars();
+
+            bgSound.play().catch(error => {
+                console.error('Error al reproducir el sonido de fondo:', error);
+            });
+        });
+
+        // Efecto de parallax en el mouse
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                const speed = (index % 5 + 1) * 0.5;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                star.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Efectos de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                openDoor();
+            }
+            if (e.key === 'Escape') {
+                closeInvitation();
+            }
+        });
+    </script>
+
+</body>
+</html>
