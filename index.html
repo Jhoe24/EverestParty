@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json" />
     <title>¡TOCA LA PUERTA! - Fiesta Everest</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Comic+Neue:wght@400;700&display=swap');
@@ -747,6 +748,15 @@
             }
         });
     </script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('✅ Service Worker registrado'))
+          .catch(err => console.error('❌ Error al registrar SW', err));
+      }
+    </script>
+
 
 </body>
 </html>
