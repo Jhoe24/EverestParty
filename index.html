@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Para colocar un favicon.png o .ico, en con  -->
+     <link rel="shortcut icon" href="icons/icon-192.png" type="image/png">
     <link rel="manifest" href="manifest.json" />
     <title>¡TOCA LA PUERTA! - Fiesta Everest</title>
     <style>
@@ -314,6 +316,27 @@
             50% { opacity: 1; }
         }
 
+        /* Video de transición */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .video-overlay video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .invitation-content {
             position: fixed;
             top: 0;
@@ -539,6 +562,14 @@
         <p class="instruction" style="display: none;">¡Toca cualquier elemento para abrir la invitación!</p>
     </div>
 
+    <!-- Video de transición -->
+    <div class="video-overlay" id="videoOverlay">
+        <video id="transitionVideo" muted playsinline>
+            <source src="assets/video/origin.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+        </video>
+    </div>
+
     <!-- Sección de la invitación -->
     <div class="invitation-content" id="invitationContent">
     <div class="invitation-card">
@@ -571,6 +602,9 @@
 
     <script>
         const bgSound = document.getElementById('bgSound');
+        const transitionVideo = document.getElementById('transitionVideo');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const container = document.querySelector('.container');
         let soundEnabled = false;
 
 
@@ -639,8 +673,14 @@
             }
         }
 
-        // Función para abrir la puerta
+        // Función para abrir la puerta (MODIFICADA)
         function openDoor() {
+            soundEnabled= true;
+            bgSound.muted = false;
+            transitionVideo.muted = false;
+            bgSound.play().catch(() => {});
+            document.querySelector('.sound-toggle').textContent = '🔊';
+
             if (soundEnabled) {
                 playDoorSound();
             }
@@ -649,20 +689,55 @@
             door.style.transform = 'rotateY(-25deg) scale(0.95)';
             door.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
 
+            // Mostrar el video overlay
             setTimeout(() => {
-                document.getElementById('invitationContent').style.display = 'flex';
-                createConfetti();
+                videoOverlay.style.display = 'flex';
+                
+                // Reproducir el video
+                transitionVideo.currentTime = 0;
+                transitionVideo.play().catch(error => {
+                    console.error('Error al reproducir el video:', error);
+                    // Si falla el video, mostrar directamente la invitación
+                    showInvitation();
+                });
 
-                if (soundEnabled) {
-                    playCelebrationSound();
-                }
+                // Cuando el video termine, mostrar la invitación
+                transitionVideo.onended = function() {
+                    showInvitation();
+                };
+
+                // Fallback: mostrar invitación después de 13 segundos si el evento 'ended' no se dispara
+                setTimeout(() => {
+                    if (videoOverlay.style.display === 'flex') {
+                        showInvitation();
+                    }
+                }, 13500);
+
             }, 300);
+        }
+
+        // Nueva función para mostrar la invitación
+        function showInvitation() {
+            // Ocultar el video
+            container.style.display = 'none';
+            videoOverlay.style.display = 'none';
+
+            
+            // Mostrar la invitación
+            document.getElementById('invitationContent').style.display = 'flex';
+            createConfetti();
+
+            if (soundEnabled) {
+                playCelebrationSound();
+            }
         }
 
         // Función para cerrar la invitación
         function closeInvitation() {
             const invitationContent = document.getElementById('invitationContent');
             invitationContent.style.animation = 'fadeOut 0.5s ease';
+
+            container.style.display = 'flex';
 
             setTimeout(() => {
                 invitationContent.style.display = 'none';
@@ -682,12 +757,14 @@
 
             if (soundEnabled) {
                 bgSound.muted = false;
+                transitionVideo.muted = false;
                 bgSound.play().catch(() => {
                     console.warn('El navegador requiere una interacción del usuario para activar el sonido.');
                 });
                 btn.textContent = '🔊';
             } else {
                 bgSound.muted = true;
+                transitionVideo.muted = true;
                 btn.textContent = '🔇';
                 
             }
